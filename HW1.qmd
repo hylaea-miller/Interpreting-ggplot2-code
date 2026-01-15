@@ -2,19 +2,20 @@
 title: "HW #1"
 subtitle: "Interpreting `{ggplot2}` code"
 description: "Assigned Wed 01/07/2026 | Due Wed 01/14/2026"
-author: "Your Name"
+author: "Hylaea Miller"
 toc: true
 code-line-numbers: true
 editor_options: 
   chunk_output_type: console
 ---
 
-::: {.callout-tip}
+::: callout-tip
 ## Some notes before you get started
-- **Be sure to install any packages** in the Setup chunk that you don't already have.
-- **Leave the code chunk options, `eval: false` and `echo: true`, set as they are.** The final infographic has been intentionally optimized (e.g., text size, spacing) for saving and viewing as a PNG file, not for display in the Plots pane or within a rendered Quarto document. As a result, the text in each individual ggplot may appear too large when viewed in the Plots pane, but will be correctly sized in the exported PNG. We’ll talk more about the nuances of saving ggplots (and why these differences occur) in a later lab section.
-- **Questions that reference line numbers (e.g., Question #1) refer to the line numbers shown in the rendered code chunks.** You will need to render the document to view these line numbers.
-- Some answers may become clearer once you’ve looked ahead at the code further down in the script. **Consider revisiting questions as you go.**
+
+-   **Be sure to install any packages** in the Setup chunk that you don't already have.
+-   **Leave the code chunk options, `eval: false` and `echo: true`, set as they are.** The final infographic has been intentionally optimized (e.g., text size, spacing) for saving and viewing as a PNG file, not for display in the Plots pane or within a rendered Quarto document. As a result, the text in each individual ggplot may appear too large when viewed in the Plots pane, but will be correctly sized in the exported PNG. We’ll talk more about the nuances of saving ggplots (and why these differences occur) in a later lab section.
+-   **Questions that reference line numbers (e.g., Question #1) refer to the line numbers shown in the rendered code chunks.** You will need to render the document to view these line numbers.
+-   Some answers may become clearer once you’ve looked ahead at the code further down in the script. **Consider revisiting questions as you go.**
 :::
 
 ## I. Setup
@@ -52,13 +53,13 @@ sysfonts::font_add(family = "fa-solid", regular = here::here("fonts", "Font Awes
 showtext::showtext_auto(enable = TRUE)
 ```
 
-1. **What is the author defining in lines 15-17? Where else in the code do these defined variables show up? What advantage(s) is there to defining these values here, as variables, rather than defining the values directly throughout the script?**
+1.  **What is the author defining in lines 15-17? Where else in the code do these defined variables show up? What advantage(s) is there to defining these values here, as variables, rather than defining the values directly throughout the script?**
 
-    - Answer here
+    -   In line 15, the author is defining two hex color codes and assigning them to the `alien` vector. In line 16, they assign the first hex color from `alien` to the `bg` (background) variable, and in line 17, they assign the second color from `alien` to the `accent` variable. These variables are used later throughout the script wherever colors are needed, for example, in plot backgrounds, text colors, and theme elements. Some advantages of using this approach are consistency, easy updates, and readability.
 
-2. **In your own words, explain what the function, `font_add_google()`, does. What's the difference between the two arguments, `name` and `family`?**
+2.  **In your own words, explain what the function, `font_add_google()`, does. What's the difference between the two arguments, `name` and `family`?**
 
-    - Answer here
+    -   The function allows you to add Google Fonts to your R session by searching their repository for a specified font family. The `name` argument is the actual name of the font on Google Fonts, while the `family` argument is a custom name you create to reference that font in your code.
 
 ## II. Data wrangling
 
@@ -78,9 +79,9 @@ df_pop <- places |>
   ungroup()
 ```
 
-3. **Describe what this data frame contains.**
+3.  **Describe what this data frame contains.**
 
-    - Answer here
+    -   This data frame contains one column called "state" with the USA state abbreviations and another column called "pop" with the total population of each state, with a total of 51 rows.
 
 ### ii. Create `df_us`
 
@@ -102,13 +103,13 @@ df_us <- ufo_sightings |>
     )
 ```
 
-4. **Describe what this data frame contains.**
+4.  **Describe what this data frame contains.**
 
-    - Answer here
+    -   This data frame contains 5 columns and 51 rows. The variables are: `state` (USA state abbreviations), `num_obs` (number of UFO sightings in each state), `pop` (total population of each state), `num_obs_per10k` (number of UFO sightings per 10,000 people), and `opacity_val` (a normalized value between 0 and 1 based on the sighting rate)
 
-5. **What does `opacity_val` represent, and why is it calculated?**
+5.  **What does `opacity_val` represent, and why is it calculated?**
 
-    - Answer here
+    -   The `opacity_val` represents a normalized transparency value ranging from 0 to 1. The author calculated by dividing each state's UFO sighting rate per 10,000 people by the maximum sighting rate across all states. This allows the opacity values to be used for visualization purposes, where states with higher sighting rates can be displayed with higher opacity (more visible) and states with lower sighting rates with lower opacity (more transparent).
 
 ### iii. Create `df_shape`
 
@@ -130,17 +131,17 @@ df_shape <- ufo_sightings |>
     )
 ```
 
-6. **Describe what this data frame contains.**
+6.  **Describe what this data frame contains.**
 
-    - Answer here
+    -   This data frame contains 3 columns and 10 rows. The variables are: `shape` (the shape of UFO sightings, excluding "unknown" and "other"), `total_sightings` (the total number of sightings for each shape), and `opacity_val` (rescaled transparency value between 0.3 and 1 based on the number of sightings). The data frame shows the top 10 most commonly reported UFO shapes, ordered by frequency.
 
-7. **What does `fct_reorder` do when it is applied to the `shape` variable? What would have happened if this step was not performed?**
+7.  **What does `fct_reorder` do when it is applied to the `shape` variable? What would have happened if this step was not performed?**
 
-    - Answer here
+    -   `fct_reorder` converts the `shape` variable into a factor and orders its levels based on the values in `total_sightings`. This ensures that when the data is plotted, the shapes will appear in order from lowest to highest sighting counts. If this step was not performed, the shapes would be ordered alphabetically by default, which wouldn't meaningfully represent the data and would make the visualization harder to interpret.
 
-8. **What is the purpose of rescaling `opacity_val`? And why rescale from 0.3 to 1?**
+8.  **What is the purpose of rescaling `opacity_val`? And why rescale from 0.3 to 1?**
 
-    - Answer here
+    -   The purpose of rescaling `opacity_val` is to map the sighting counts to a usable opacity range for visualization. By rescaling from 0.3 to 1 instead of 0 to 1, it ensures that even the shapes with the lowest sighting counts remain visible in the plot rather than being completely transparent.
 
 ### iv. Create `df_day_hour`
 
@@ -166,13 +167,13 @@ df_day_hour <- ufo_sightings |>
     )
 ```
 
-9. **Describe what this data frame contains.**
+9.  **Describe what this data frame contains.**
 
-    - Answer here
+    -   This data frame contains 6 columns and 168 rows representing UFO sightings aggregated by day of the week and hour of the day. The variables are: `day` (numeric day of the week, 1-7), `wday` (labeled day of the week like "Mon", "Tue"), `hour` (hour of the day), `total_daily_obs` (count of UFO sightings for each day-hour combination), `opacity_val` (normalized transparency value between 0 and 1 based on sighting counts), and `hour_lab` (formatted hour labels)
 
 10. **What is the purpose of the last line inside the `case_when()` statement (`TRUE ~ paste0(hour - 12, "pm")`)?**
 
-    - Answer here
+    -   The purpose is to convert hours from military time (24-hour format) to regular time (12-hour format). This last line handles all the afternoon and evening hours (13-23) by subtracting 12 and adding "pm"
 
 ## III. Prepare text elements
 
@@ -194,7 +195,7 @@ caption <- glue("{original}{space}{dan_github}
 
 11. **In your own words, what is the difference between `paste0()` and `glue()`? Why did the author use `paste0` to construct `quotes` and `glue` to construct the other text elements?**
 
-    - Answer here
+    -   `The paste0()` sticks strings together, while `glue()` lets you insert variables directly into your text using `{}`. The author used `paste0()` for quotes because it was just combining simple text pieces. They used `glue()` for the other elements because those needed to include variables like color values and make the code easier to read
 
 ## IV. Build plots
 
@@ -236,9 +237,9 @@ plot_shape <- ggplot(data = df_shape) +
 
 12. **Explain the values provided to the `x` aesthetic for both text geoms (`shape` & `total_sightings`).**
 
-    - Answer here
+    -   The first geom_text uses x = 200, which places the shape names at a fixed position 200 units from the left edge of the plot. The second geom_text uses x = total_sightings - 200, which positions the sighting counts 200 units to the left of each bar's end. This creates spacing where the shape names appear near the start of the bars and the counts appear near the end of the bars.
 
-### ii. Build `plot_us` 
+### ii. Build `plot_us`
 
 **HINT:** Consider temporarily commenting out / rearranging the `geom_*()` layers to better understand how this plot is constructed
 
@@ -276,7 +277,7 @@ plot_us <-  ggplot(df_us) +
 
 13. **Consider the order of `geom_*()` layers in the the above plot (`plot_us`). Why did the author order the layers in this way?**
 
-    - Answer here
+    -   The author ordered the layers so that geom_rect comes first, creating the colored rectangles as the background. Then the two geom_text layers are added on top, which places the state abbreviations and sighting rates over the rectangles. This layering order ensures the text is visible and not hidden behind the rectangles.
 
 ### iii. Build `plot_day`
 
@@ -310,11 +311,11 @@ plot_day <- ggplot(data = df_day_hour) +
 
 14. **This plot includes one-letter labels for each day of the week. How is this accomplished when week days are written using their three-letter abbreviations (e.g. `Mon`, `Tue`) in the `df_day_hour` data frame?**
 
-    - Answer here
+    -   This is accomplished using str_sub(string = wday, start = 1, end = 1) inside the geom_text layer. The str_sub() function extracts only the first character from each three-letter day abbreviation.
 
 15. **What role do the `ylim()` and `xlim()` functions play in shaping a ggplot, and how do they change the visual layout of this particular plot? To better understand their effect, try rerunning the code with each of these lines commented out and observe how the plot’s spacing and composition change.**
 
-    - Answer here
+    -   ylim() and xlim() set the limits for the y-axis and x-axis. In this plot, ylim(-5, 9) extends the y-axis range below 0 and above 7, which decreases the empty space in the center of the circle. xlim(NA, 23.55) slightly extends the right side of the x-axis to add a small gap between 11pm and 12am when wrapped into a circle. Without these adjustments, the days of the week on the plot look tightly packed without spaces.
 
 ### iv. Build `quote*`s
 
@@ -375,11 +376,11 @@ quote3 <- ggplot() +
 
 16. **Why do you think the author chose to convert these text elements (and also in `plot_ufo`, below!) into ggplot objects (you may consider returning to this question after you've worked your way through all of the code)?**
 
-    - Answer here
+    -   Turning everything into ggplot objects enables easier positioning, scaling, and layering, which facilitates the poster-style composition.
 
 ### v. Build `plot_ufo`
 
-**Note:** Grob stands for **gr**aphical **ob**ject. Each visual element rendered in a a ggplot (e.g. lines, points, axes, entire panels, even images) is represented as a grob. Grobs can be manipulated individually to fully customize plots. 
+**Note:** Grob stands for **gr**aphical **ob**ject. Each visual element rendered in a a ggplot (e.g. lines, points, axes, entire panels, even images) is represented as a grob. Grobs can be manipulated individually to fully customize plots.
 
 ```{r}
 #| eval: false
@@ -393,7 +394,7 @@ plot_ufo <- ggplot() +
   )
 ```
 
-### vi. Build `plot_base` 
+### vi. Build `plot_base`
 
 ```{r}
 #| eval: false
@@ -431,7 +432,7 @@ plot_base <- ggplot() +
 
 17. **Why does the author render `plot.caption` using `ggtext::element_markdown()`, rather than `element_text()` (like he does for rendering `plot.title` and `text`)?**
 
-    - Answer here
+    -   The author uses ggtext::element_markdown() for the caption because it allows rendering of Markdown formatting within the text, such as bold, italics, links, or other styled elements.
 
 ## V. Assemble & save
 
@@ -462,40 +463,40 @@ ggsave(plot = plot_final,
 
 18. **Explain how `plot_final` is assembled. What do you think is the most challenging aspect of arranging all components into a single plot?**
 
-    - Answer here
+    -   plot_final is assembled by starting with plot_base as the foundation and then layering individual plot components using inset_element(). Each component is positioned using coordinates that specify where it should appear (left, right, top, bottom values between 0 and 1). The most challenging aspect is likely determining the precise positioning coordinates for each element to avoid overlaps while creating a composition that maintains readability.
 
 19. **Can you think of one reason the author may have chosen to separate the construction of `plot_base` and `plot_final`?**
 
-    - Answer here
+    -   I think that separating plot_base and plot_final allows for better code organization and easier troubleshooting. By building the base layer with titles, captions, and overall theme settings separately, the author can test and modify the foundation independently before adding the complexity of positioning multiple plot elements.
 
-## Answer some final reflective questions 
+## Answer some final reflective questions
 
 20. **During week 2, we discuss [Choosing the right graphic form](https://eds-240-data-viz.github.io/course-materials/lecture-slides/lecture2.1-choosing-graphic-forms-slides.html#/title-slide). Refer to this lecture when answering the sub-questions, below:**
 
-    a. **What "perceptual tasks" (from Cleveland & McGill's heirarchy) must the viewer perform to extract information from these visualizations?**
-        
-        - Answer here
-    
-    b. **What task(s) do you think the author wanted to enable or message(s) he wanted to convey with these visualizations (see lecture 2.1, slide 16 for examples)? Be sure to note at least one task / message for each of the three data viz.**
-    
-        - Answer here
-    
-    c. **Name at least one caveat to the "hierarchy of perceptual tasks" that the author employed to achieve a goal(s) you noted in question b?**
-    
-        - Answer here
+    a.  **What "perceptual tasks" (from Cleveland & McGill's heirarchy) must the viewer perform to extract information from these visualizations?**
 
-21. **Describe two elements of this piece that you find visually-pleasing / easy to understand / intuitive. Why?** 
+        -   The three main visualizations require different perceptual tasks. The UFO shape visualization uses a bar plot to compare counts across different shape categories, with higher transparency indicating lower counts. The US map visualization requires judging color shading and position on a spatial map to understand the geographic distribution of sightings. The time-of-day visualization uses shading and angles, since it is a circular plot, which ranks lower in the perceptual hierarchy and is potentially more challenging for accurate interpretation than the first graph.
 
-    - Answer here
+    b.  **What task(s) do you think the author wanted to enable or message(s) he wanted to convey with these visualizations (see lecture 2.1, slide 16 for examples)? Be sure to note at least one task / message for each of the three data viz.**
 
-22. **Describe two elements of this piece that you feel could be better presented in a different way. Why?** 
+        -   For the UFO shape visualization, the author wanted to enable comparison of which shapes are most commonly reported, revealing that "light" is the most frequent category by representing the first bar as lighter. For the US map, the message is to reveal geographic patterns and show where sightings are concentrated across different states. For the time-of-day visualization, the goal is to show temporal patterns and enable viewers to see when sightings peak throughout the day and week, with a plot resembling a clock.
 
-    - Answer here
-    
+    c.  **Name at least one caveat to the "hierarchy of perceptual tasks" that the author employed to achieve a goal(s) you noted in question b?**
+
+        -   The author used a map visualization despite spatial position not being at the top of the perceptual hierarchy, because showing geographic distribution was essential to the message. The familiarity of the US map shape makes it intuitive for viewers to understand regional patterns, even though extracting precise values from color intensity is less accurate than other methods.
+
+21. **Describe two elements of this piece that you find visually-pleasing / easy to understand / intuitive. Why?**
+
+    -   The color scheme is intuitive and thematic, using dark backgrounds with accent colors that convey a UFO aesthetic. The use of the UFO image as a decorative element is visually-pleasing and reinforces the theme without cluttering the information.
+
+22. **Describe two elements of this piece that you feel could be better presented in a different way. Why?**
+
+    -   The time-of-day visualization with multiple small line charts could be challenging to compare accurately across days, a heat map might make temporal patterns easier to identify. Additionally, the quotes scattered throughout are somewhat distracting from the main analytical insights. Consolidating or repositioning them might improve focus on the data story.
+
 23. **Describe two new things that you learned by interpreting / annotating this code. These could be packages, functions, or even code organizational approaches that you hadn't previously known about or considered.**
 
-    - Answer here
+    -   I learned about the modular approach of creating separate ggplot objects for different components and then assembling them using inset_element() with coordinate positioning, which provides more control over layout. I also learned about converting text elements into ggplot objects using ggtext::element_markdown(), which allows for richer formatting and enables treating text as graphical objects that can be positioned and layered like any other plot component.
 
 24. **How, if at all, did you use AI tools to help you interpret this code? Describe your approach to using these tools for this assignment. In what ways was consulting the documentation more (or less) helpful than using AI?**
 
-    - Answer here
+    -   I used AI tools to understand the purpose of unfamiliar syntax and to clarify more complex code structures, which saved time compared to searching through documentation. However, consulting the official documentation was more helpful for understanding the specific parameter behavior of functions and more accurate with respect to functionality. Considering the easy access of the help pages in R and the examples provided, it ended up being pretty quick.
